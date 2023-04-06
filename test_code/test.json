@@ -1,0 +1,82 @@
+{
+    "stp_list":{"경안":"ga","광주":"gj","오포":"op"},
+    "ga": {
+		"code": "ga-stp",
+		"name": "오포맑은물복원센터",
+        "report_type" : {"운영":"op", "고도":"dbf"},
+
+        "op" :{
+            "name": "운영보고서",
+            "path": "운영",
+            "cycle": {"월보":"m", "년보":"y"},
+            "daily":{
+                "code": "m",
+                "name": "오포고도일일보고서",
+                "template": "dbf_rptday.xlsx",
+                "pg_head_size_in_shts": [],
+                "pg_tail_size_in_shts": [],
+                "date_cell_in_shts":  [],
+                "first_data_cell_in_shts":  [],
+                "first_sum_cell_in_shts":  []
+            },
+            "monthly":{
+                "name": "오포고도월간보고서",
+                "template": "dbf_rptmonth.xlsx",
+                "pg_head_size_in_shts": [],
+                "pg_tail_size_in_shts": [],
+                "date_cell_in_shts":  [],
+                "first_data_cell_in_shts":  [],
+                "first_sum_cell_in_shts":  []
+            },
+            "yearly":{
+                "name": "오포고도년간보고서",
+                "template": "dbf_rptyear.xlsx",
+                "pg_head_size_in_shts": [],
+                "pg_tail_size_in_shts": [],
+                "date_cell_in_shts":  [],
+                "first_data_cell_in_shts":  [],
+                "first_sum_cell_in_shts":  []
+            }
+        },
+        
+        "dbf" :{
+            "name": "운영보고서",
+            "path": "운영",
+            "cycle": {"월보":"m", "년보":"y"}
+        }
+    },
+
+    "gj": {
+		"code": "op-stp",
+		"name": "광주맑은물복원센터",
+        "report": {
+            "op" :{
+                "name": "운영보고서",
+                "path": "운영",
+                "cycle": {"월보":"m", "년보":"y"}
+            },
+            "dbf" :{
+                "name": "운영보고서",
+                "path": "운영",
+                "cycle": {"월보":"m", "년보":"y"}
+            }
+        }
+    },
+
+    "op": {
+		"code": "op-stp",
+		"name": "오포맑은물복원센터",
+        "report": {
+            "op" :{
+                "name": "운영보고서",
+                "path": "운영",
+                "cycle": {"월보":"m", "년보":"y"}
+            },
+            "dbf" :{
+                "name": "운영보고서",
+                "path": "운영",
+                "cycle": {"월보":"m", "년보":"y"}
+            }
+        }
+    }
+}

@@ -1,0 +1,156 @@
+{
+	"ver": 0.3,
+	"stp_list_ui": ["분원", "귀여", "검천", "수청"],
+	"stp_code_list": ["bw", "gy", "kc", "sc"],
+	"report_type_list_ui": ["월보", "년보"],
+	"report_type_code_list": ["m", "y"],
+	"report_root_path": "d:/catdata/reports",
+	"template_path": "d:/app/bw-los/xlrpt/xlsx/bw-los",
+	
+	"bw": {
+		"code": "bw-stp",
+		"name": "분원맑은물복원센터",
+		"sum_cell_types": [
+			[ [0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0] ],
+			[ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ],
+			[ [1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] ],
+			[ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1] ]
+		],
+		"daily":{
+			"name":"분원일일보고서",
+			"template": "bw_rptday.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"first_data_cell_in_day_sht": "b8",
+			"first_sum_cell_in_day_sht": "b32"
+
+		},
+		"monthly":{
+			"name": "분원월간보고서",
+			"template": "bw_rptmonth.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"date_cell_in_sht": "c4",
+			"first_data_cell_in_sht": "b8",
+			"first_sum_cell_in_sht": "b39"
+		},
+		"yearly":{
+			"name": "분원년간보고서",
+			"template": "bw_rptyear.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"date_cell_in_sht": "c4",
+			"first_data_cell_in_sht": "b8",
+			"first_sum_cell_in_sht": "b20"
+		}
+	},
+
+	"gy": {
+		"code": "gy-stp",		
+		"name": "귀여맑은물복원센터",
+		"sum_cell_types": [
+			[ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ],
+			[ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ],
+			[ [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] ],
+			[ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ]
+		],
+		"daily":{
+			"name":"귀여일일보고서",
+			"template": "gy_rptday.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"first_data_cell_in_day_sht": "b8",
+			"first_sum_cell_in_day_sht": "b32"
+		},
+		"monthly":{
+			"name": "귀여월간보고서",
+			"template": "gy_rptmonth.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"date_cell_in_sht": "c5",
+			"first_data_cell_in_sht": "b8",
+			"first_sum_cell_in_sht": "b39"
+		},
+		"yearly":{
+			"name": "귀여년간보고서",
+			"template": "gy_rptyear.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 6,
+			"date_cell_in_sht": "c5",
+			"first_data_cell_in_sht": "b8",
+			"first_sum_cell_in_sht": "b20"
+		}
+	},
+
+	"gc": {	
+		"code": "gc-stp",
+		"name": "검천맑은물복원센터",
+		"sum_cell_types": [
+			[ [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1 ] ],
+			[ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ],
+			[ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ]
+		],
+		"daily":{
+			"name":"검천일일보고서",
+			"template": "gc_rptday.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"first_data_cell_in_day_sht": "b8",
+			"first_sum_cell_in_day_sht": "b32"
+		},
+		"monthly":{
+			"name": "검천월간보고서",
+			"template": "gc_rptmonth.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"date_cell_in_sht": "c4",
+			"first_data_cell_in_sht": "b8",
+			"first_sum_cell_in_sht": "b39"
+		},
+		"yearly":{
+			"name": "검천년간보고서",
+			"template": "gc_rptyear.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"date_cell_in_sht": "c4",
+			"first_data_cell_in_sht": "b8",
+			"first_sum_cell_in_sht": "b20"
+		}
+	},
+
+	"sc": {	
+		"code": "sc-stp",
+		"name": "수청맑은물복원센터",
+		"sum_cell_types": [
+			[ [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1] ],
+			[ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ],
+			[ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ]
+		],
+		"daily":{
+			"name":"수청일일보고서",
+			"template": "sc_rptday.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"first_data_cell_in_day_sht": "b8",
+			"first_sum_cell_in_day_sht": "b32"
+		},
+		"monthly":{
+			"name": "수청월간보고서",
+			"template": "sc_rptmonth.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"date_cell_in_sht": "c4",
+			"first_data_cell_in_sht": "b8",
+			"first_sum_cell_in_sht": "b39"
+		},
+		"yearly":{
+			"name": "수청년간보고서",
+			"template": "sc_rptyear.xlsx",
+			"pg_head_size": 7,
+			"pg_tail_size": 4,
+			"date_cell_in_sht": "c4",
+			"first_data_cell_in_sht": "b8",
+			"first_sum_cell_in_sht": "b20"
+		}
+	}                              
+}

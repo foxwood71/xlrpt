@@ -1,0 +1,195 @@
+{
+	"ver": 0.5,
+	"desc": "오포보고서 관련 Sheet간 head, tail size 불일치로 상수에서 배열로 전환 및 처리시설별 다중보고서 형태로 구조변경",
+	
+	"report_root_path": "d:/catdata/reports",
+	"template_path": "d:/app/op-los/xlrpt/xlsx/op-los",
+	
+	"stp_list": {"오포":"op", "매산":"ms"},
+
+	"op": {
+		"name": "오포맑은물복원센터",
+		"folder": "오포",
+        "rpt_type" : {"운영": "op", "고도": "dbf"},
+		"op" :{
+			"name": "운영보고서",
+			"folder": "운영",
+			"rpt_cycle": {"운영월보": "m", "운영년보": "y"},
+			"sum_cell_types": [
+				[
+				 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+				 [0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+				 [0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0]
+				],
+				[
+				 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]			 		
+				],	
+				[
+				 [0, 0, 3, 3, 3, 0, 3, 3, 3, 0, 3, 0, 3, 0],
+				 [0, 3, 3, 3, 3, 0, 3, 3, 3, 0, 3, 0, 3, 0],
+				 [0, 3, 3, 3, 3, 0, 3, 3, 3, 0, 3, 0, 3, 0],
+				 [0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0]
+				],
+				[
+				 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+				],
+				[ 
+				 [2, 2, 2, 3, 3, 2, 2, 2, 2, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3],
+				 [3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+				 [3, 3, 3, 3, 3, 3, 2, 2, 3, 3]
+				],
+				[ 
+				 [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+				 [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+				 [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+				 [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+				 [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+				 [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+				 [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+				],
+				[ 
+				 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+				 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+				 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+				]
+			],
+			"d":{
+				"name":"오포운영일일보고서",
+				"template": "op_rptday.xlsx",
+				"pg_head_size_in_shts": [ 6, 6, 4, 4, 6, 6, 8],
+				"pg_tail_size_in_shts": [ 4, 4, 4, 4, 5, 5, 4],
+				"date_cell_in_shts":  ["b3","b3","b2","b2","b3","b3","b5"],
+				"first_data_cell_in_shts": ["b7","b7","b5","b5","b7","b7","b12"],
+				"first_sum_cell_in_shts": ["b31","b31","b29","b29","b31","b31","b36"]
+			},
+			"m":{
+				"name": "오포운영월간보고서",
+				"template": "op_rptmonth.xlsx",
+				"pg_head_size_in_shts": [ 6, 6, 4, 4, 6, 6, 8],
+				"pg_tail_size_in_shts": [ 4, 4, 4, 4, 5, 5, 4],
+				"date_cell_in_shts":  ["b3","b3","b2","b2","b3","b3","b5"],
+				"first_data_cell_in_shts":  ["b7","b7","b5","b5","b7","b7","b12"],
+				"first_sum_cell_in_shts":  ["b38","b38","b36","b36","b38","b38","b43"]
+			},
+			"y":{
+				"name": "오포운영년간보고서",
+				"template": "op_rptyear.xlsx",
+				"pg_head_size_in_shts": [ 6, 6, 4, 4, 6, 6, 8],
+				"pg_tail_size_in_shts": [ 4, 4, 4, 4, 5, 5, 4],
+				"date_cell_in_shts":  ["b3","b3","b2","b2","b3","b3","b5"],
+				"first_data_cell_in_shts":  ["b7","b7","b5","b5","b7","b7","b12"],
+				"first_sum_cell_in_shts":  ["b19","b19","b17","b17","b19","b19","b24"]
+			}
+		},
+
+		"dbf" :{
+			"name": "고도처리 보고서",
+			"folder": "고도",
+			"rpt_cycle": {"고도월보":"m", "고도년보":"y"},
+			"sum_cell_types": [],
+			"d":{
+				"name": "오포고도일일보고서",
+				"template": "dbf_rptday.xlsx",
+				"pg_head_size_in_shts": [],
+				"pg_tail_size_in_shts": [],
+				"date_cell_in_shts":  [],
+				"first_data_cell_in_shts":  [],
+				"first_sum_cell_in_shts":  []
+			},
+			"m":{
+				"name": "오포고도월간보고서",
+				"template": "dbf_rptmonth.xlsx",
+				"pg_head_size_in_shts": [],
+				"pg_tail_size_in_shts": [],
+				"date_cell_in_shts":  [],
+				"first_data_cell_in_shts":  [],
+				"first_sum_cell_in_shts":  []
+			},
+			"y":{
+				"name": "오포고도년간보고서",
+				"template": "dbf_rptyear.xlsx",
+				"pg_head_size_in_shts": [],
+				"pg_tail_size_in_shts": [],
+				"date_cell_in_shts":  [],
+				"first_data_cell_in_shts":  [],
+				"first_sum_cell_in_shts":  []
+			}
+		}
+	},
+	"ms": {
+		"name": "매산맑은물복원센터",
+		"folder": "매산",
+        "rpt_type" : {"매산운영": "op", "매산고도": "dbf"},
+		"op" :{
+			"name": "운영보고서",
+			"folder": "운영",
+			"rpt_cycle": {"매산운영월보": "m", "매산운영년보": "y"},
+			"sum_cell_types": [],
+			"d":{
+				"name":"오포운영일일보고서",
+				"template": "op_rptday.xlsx",
+				"pg_head_size_in_shts": [ 6, 6, 4, 4, 6, 6, 8],
+				"pg_tail_size_in_shts": [ 4, 4, 4, 4, 5, 5, 4],
+				"first_data_cell_in_shts": ["b7","b7","b5","b5","b7","b7","b12"],
+				"first_sum_cell_in_shts": ["b31","b31","b29","b29","b31","b31","b36"]
+			},
+			"m":{
+				"name": "오포운영월간보고서",
+				"template": "op_rptmonth.xlsx",
+				"pg_head_size_in_shts": [ 6, 6, 4, 4, 6, 6, 8],
+				"pg_tail_size_in_shts": [ 4, 4, 4, 4, 5, 5, 4],
+				"date_cell_in_shts":  ["b3","b3","b2","b2","b3","b3","b5"],
+				"first_data_cell_in_shts":  ["b7","b7","b5","b5","b7","b7","b12"],
+				"first_sum_cell_in_shts":  ["b38","b38","b36","b36","b38","b38","b43"]
+			},
+			"y":{
+				"name": "오포운영년간보고서",
+				"template": "op_rptyear.xlsx",
+				"pg_head_size_in_shts": [ 6, 6, 4, 4, 6, 6, 8],
+				"pg_tail_size_in_shts": [ 4, 4, 4, 4, 5, 5, 4],
+				"date_cell_in_shts":  ["b3","b3","b2","b2","b3","b3","b5"],
+				"first_data_cell_in_shts":  ["b7","b7","b5","b5","b7","b7","b12"],
+				"first_sum_cell_in_shts":  ["b19","b19","b17","b17","b19","b19","b24"]
+			}
+		},
+
+		"dbf" :{
+			"name": "고도처리 보고서",
+			"folder": "고도",
+			"rpt_cycle": {"매산고도월보":"m", "매산고도년보":"y"},
+			"sum_cell_types": [],
+			"d":{
+				"name": "오포고도일일보고서",
+				"template": "dbf_rptday.xlsx",
+				"pg_head_size_in_shts": [],
+				"pg_tail_size_in_shts": [],
+				"date_cell_in_shts":  [],
+				"first_data_cell_in_shts":  [],
+				"first_sum_cell_in_shts":  []
+			},
+			"m":{
+				"name": "오포고도월간보고서",
+				"template": "dbf_rptmonth.xlsx",
+				"pg_head_size_in_shts": [],
+				"pg_tail_size_in_shts": [],
+				"date_cell_in_shts":  [],
+				"first_data_cell_in_shts":  [],
+				"first_sum_cell_in_shts":  []
+			},
+			"y":{
+				"name": "오포고도년간보고서",
+				"template": "dbf_rptyear.xlsx",
+				"pg_head_size_in_shts": [],
+				"pg_tail_size_in_shts": [],
+				"date_cell_in_shts":  [],
+				"first_data_cell_in_shts":  [],
+				"first_sum_cell_in_shts":  []
+			}
+		}
+	}
+}
