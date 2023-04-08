@@ -9,7 +9,7 @@
 
 	"op": {
 		"name": "오포맑은물복원센터",
-		"folder": "오포",
+		"folder": "op-stp",
         "rpt_type" : {"운영": "op", "고도": "dbf"},
 		"op" :{
 			"name": "운영보고서",

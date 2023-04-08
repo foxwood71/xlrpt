@@ -1,0 +1,20 @@
+from openpyxl import load_workbook
+from openpyxl import Workbook
+import datetime
+
+#엑셀파일 불러오기
+filename='sample.xlsx'
+wb = load_workbook(filename)
+ws = wb.active
+
+#범위 이동
+ws['A1'] = datetime.datetime(2019,3,4) #yyyy-mm-dd hh:mm:ss
+ws['A2'] = datetime.date(2019,3,4) #yyyy-mm-dd
+ws['A3'] = datetime.date(2019,3,4).year #yyyy
+ws['A4'] = datetime.date(2019,3,4).month #mm
+ws['A5'] = datetime.date(2019,3,4).day #dd
+ws['A6'] = datetime.date(2019,3,4).weekday() #요일
+ws['A7'] = datetime.date(2019,3,4).strftime("%Y년 %m월 %d일".encode('unicode-escape').decode()).encode().decode('unicode-escape') #년월일
+
+#저장하기
+wb.save(filename)

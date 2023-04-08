@@ -10,10 +10,16 @@
             "request": "launch",
             "program": "${file}",
             "args": [
-                "-p", "op",
-                "-s", "2023-03-01",  
-                "-e", "2023-03-31",
-                "-t", "m"
+                "--stp",
+                "op",
+                "--rpt_type",
+                "op",
+                "--rpt_cycle",
+                "m",
+                "--start_date",
+                "2023-03-01",
+                "--end_date",
+                "2023-03-31"
             ],
             "console": "integratedTerminal"
         },

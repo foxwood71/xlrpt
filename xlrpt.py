@@ -31,13 +31,12 @@ def main():
     """
     main 함수
     """
+    rpt_para: dict = {}
+    rpt_dat: dict = {}
+    rpt_dat_code: dict = {}
 
     conf: dict = xlrpt_utils.read_config()
 
-    rpt_para: dict = {}
-
-    rpt_dat: dict = {}
-    rpt_dat_code: dict = {}
     stps: dict = conf["stp_list"]
 
     for stp_name, stp_code in stps.items():
@@ -50,7 +49,6 @@ def main():
         rpt_dat[stp_name] = rpt_list
 
     if len(sys.argv) == 1:
-
         app_mode_ui = True
         app = app_ui.App(rpt_dat=rpt_dat, rpt_dat_code=rpt_dat_code)
         app.title("보고서생성기 v0.15, 2023.03.29")
@@ -85,21 +83,12 @@ def main():
                 "report_type": cli_args.report_type,
             }
 
-    if rpt_para["stp"] == "전체":
-        stps = conf["stp_list"]
-
-    else:
-        stps = [
-            rpt_para["stp"],
-        ]
-
     diff_date = relativedelta(rpt_para["end_date"], rpt_para["start_date"])  # 두 날짜의 차이 구하기
 
     diff_months = 12 * diff_date.years + diff_date.months  # 두 날짜의 차이나는 개월수
     diff_years = diff_date.years  # 두 날짜의 차이나는 개월수
 
     for stp in stps:
-
         if rpt_para["report_type"] == xlrpt_xl.MONTHLY:  # 월보
             print("---- 월보 ----> " + stp)
             for i in range(0, diff_months + 1, 1):

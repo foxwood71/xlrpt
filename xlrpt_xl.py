@@ -73,7 +73,7 @@ def xlsx_rpt(**kwargs):
     rpt_type: str = kwargs["rpt_type"]
 
     src_rpt_cycl: str = ""
-    dst_rpt_cycl: str = kwargs["rpt_cyc"]
+    dst_rpt_cycl: str = kwargs["rpt_cycl"]
 
     start_date: datetime.date = kwargs["start_date"]
     end_date: datetime.date = kwargs["end_date"]
@@ -106,6 +106,9 @@ def xlsx_rpt(**kwargs):
     wb_sum_cell_types: dict = conf[stp][rpt_type]["sum_cell_types"]
     wb_shts: int = len(wb_sum_cell_types)
 
+    src_rpt_date_height: int = 0
+    dst_rpt_date_height: int = 0
+
     for i in range(wb_shts):
         pages = len(wb_sum_cell_types[i])
         wb_pgs_in_shts.append(pages)
@@ -117,7 +120,7 @@ def xlsx_rpt(**kwargs):
     date_cell_in_shts = conf[stp][rpt_type][dst_rpt_cycl]["date_cell_in_shts"]
     first_data_cell_in_shts = conf[stp][rpt_type][dst_rpt_cycl]["first_data_cell_in_shts"]
 
-    if rpt_type == MONTHLY:  # MONTHLY
+    if dst_rpt_cycl == MONTHLY:  # MONTHLY
         src_rpt_cycl = DAILY
         src_rpt_date_height = DAILY_RPT_DATA_HEIGHT
         dst_rpt_date_height = MONTHLY_RPT_DATA_HEIGHT
@@ -133,7 +136,7 @@ def xlsx_rpt(**kwargs):
 
         first_data_rd_cell_in_shts = conf[stp][rpt_type][src_rpt_cycl]["first_sum_cell_in_shts"]
 
-    elif rpt_type == YEARLY:
+    elif dst_rpt_cycl == YEARLY:
         src_rpt_cycl = MONTHLY
         src_rpt_date_height = MONTHLY_RPT_DATA_HEIGHT
         dst_rpt_date_height = YEARLY_RPT_DATA_HEIGHT
@@ -280,11 +283,6 @@ def xlsx_rpt(**kwargs):
 
                     first_data_rd_cell_in_shts_a1 = coordinate_from_string(first_data_rd_cell_in_shts[sht])
 
-                    """ first_data_cell_in_sht_rc = coordinate_from_string(
-                        first_data_cell_in_shts[sht]
-                    ) """
-
-                    # first_data_rd_cell_in_shts_rc = coordinate_to_tuple(first_data_rd_cell_in_shts[sht])
                     first_data_cell_in_sht_rc = coordinate_to_tuple(first_data_cell_in_shts[sht])
 
                     pg_size_src = (
@@ -333,27 +331,23 @@ def xlsx_rpt(**kwargs):
                                 f"{date_cell_in_shts_a1[0]}"
                                 f"{str(date_cell_in_shts_a1[1] + ((pg_size_dst * pg) + pg_offset))}"
                             )
-                            if rpt_type == YEARLY:
-                                dst_ws[pg_date_cell_a1] = datetime.datetime.strptime(
-                                    f"{start_date.year:04}-01-01", "%Y-%m-%d"
-                                )
-                            else:  # monthly flow report
-                                dst_ws[pg_date_cell_a1] = datetime.datetime.strptime(
-                                    f"{start_date.year:04}-{start_date.month:02}-01",
-                                    "%Y-%m-%d",
-                                )
-
+                            if rpt_type == YEARLY:  # yearly report
+                                dst_ws[pg_date_cell_a1].value = datetime.date(start_date.year, 1, 1)
+                                dst_ws[pg_date_cell_a1].number_format = "yyyy"
+                            else:  # monthly
+                                dst_ws[pg_date_cell_a1].value = datetime.date(start_date.year, start_date.month, 1)
+                                dst_ws[pg_date_cell_a1].number_format = "yyyy-mm"
                         # Read src data
                         pg_sum_first_cell = (
                             f"{first_data_rd_cell_in_shts_a1[0]}"
-                            f"{str(first_data_rd_cell_in_shts_a1[1] + ((pg_size_src * pg) + pg_offset))}"
+                            f"{first_data_rd_cell_in_shts_a1[1] + ((pg_size_src * pg) + pg_offset)}"
                         )
                         pg_sum_last_cell_col = get_column_letter(
                             column_index_from_string(first_data_rd_cell_in_shts_a1[0]) + wb_cols_in_shts[sht][pg] - 1
                         )
                         pg_sum_last_cell = (
                             f"{pg_sum_last_cell_col}"
-                            f"{str(first_data_rd_cell_in_shts_a1[1] + 3 + ((pg_size_src * pg) + pg_offset ) )}"
+                            f"{first_data_rd_cell_in_shts_a1[1] + 3 + ((pg_size_src * pg) + pg_offset )}"
                         )
                         pg_sum_rng = f"{pg_sum_first_cell}:{pg_sum_last_cell}"
 
@@ -365,9 +359,7 @@ def xlsx_rpt(**kwargs):
                             r1 = first_data_cell_in_sht_rc[0] + ((pg_size_dst * pg) + rpt_idx + pg_offset) - 1
                             c1 = first_data_cell_in_sht_rc[1] + i
                             # print(sht, pg, get_column_letter(c1) + str(r1), i) # <= check point
-                            """ dst_ws.cell(row=r1, column=c1).value = \
-                                xl_sum_cell_rng[j][i].value """
-                            dst_ws[get_column_letter(c1) + str(r1)].value = xl_sum_cell_rng[j][i].value
+                            dst_ws[f"{get_column_letter(c1)}{r1}"].value = xl_sum_cell_rng[j][i].value
 
             src_wb.close()
 
@@ -400,6 +392,10 @@ def xlsx_rpt(**kwargs):
 
 
 if __name__ == "__main__":
+    import warnings
+
+    warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
+
     # close all excel app
     xlrpt_utils.close_all_excel_app()
     # read configuration file

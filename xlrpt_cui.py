@@ -22,7 +22,7 @@ def get_arg(**kwargs):
     rpt_dat_code: dict = kwargs["rpt_dat_code"]
     # help_msg: str = kwargs["help_msg"]
 
-    stp_code_list: dict = list(rpt_dat_code.keys())
+    stp_code_list: list = list(rpt_dat_code.keys())
 
     parser = argparse.ArgumentParser(description="월/년 보고서 생성기 v0.1")
     parser.add_argument(
@@ -80,7 +80,7 @@ def get_arg(**kwargs):
 
     # 명령행 인수 논리 오류 검증 및 명칭 변경
 
-    today: datetime.date = datetime.today()
+    today: datetime.date = datetime.datetime.today()
 
     if args.stp not in stp_code_list:
         print(f"시설명이 {stp_code_list} 중에 있어야 합니다.")
@@ -96,13 +96,16 @@ def get_arg(**kwargs):
                 print(f"{args.stp}의 {args.report_type} 보고서의 주기 코드는 {report_cycle_code_list} 중에 있어야 합니다.")
                 args = None
 
-    if args.start_date is None:
-        args.start_date = datetime.date(today.year, today.month, 1)
-    elif args.end_date is None:
+    # if args.start_date is None:
+    #    args.start_date = datetime.date(today.year, today.month, 1)
+
+    if args.end_date is None:
         args.end_date = xlrpt_utils.last_day_of_month(args.start_date)
     elif args.start_date > args.end_date:
         print("시작일이 종료일보다 클 수 없습니다")
         args = None
+    else:
+        pass
 
     return args
     # return (args.stp, args.start_date, args.end_date, args.month_report, args.year_report)
