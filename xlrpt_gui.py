@@ -10,7 +10,7 @@
 
 import datetime
 import tkinter as tk
-import tkinter.messagebox as tkmb
+import tkinter.messagebox as msgbox
 from tkinter import ttk
 
 from tkcalendar import DateEntry
@@ -18,23 +18,18 @@ from tkcalendar import DateEntry
 import xlrpt_utils
 
 
-def msgbox(msg):
-    """
-    main 함수
-    """
-    tkmb.showinfo("알림", msg)
-
-
 class App(tk.Tk):
     """
-    main 함수
+    App Class
     """
 
-    # Class Variable
-    # rpt_stp = ''
-    # start_date = None
-    # end_date= None
-    # rpt_type= 0
+    __rpt_dat_code: dict
+
+    stp: str  # The code of the sewage treatment plant for which you want to generate the report must be from
+    report_type: str  # Report Generation Type Code
+    report_cycle: str  # Report generating cycle code
+    start_date: datetime.date  # The report generation start date, defaults to Today
+    end_date: datetime.date  # Report generation end date, defaults to the last day of month of the start date
 
     def stp_selected(self, rpt_dat):
         self.cbo_rpt["values"] = list(rpt_dat[self.cbo_stp.get()].keys())
@@ -52,7 +47,7 @@ class App(tk.Tk):
         # report_type_list = [rpt_type for rpt_type in kwargs['report_type_list'].keys()]
 
         rpt_dat = kwargs["rpt_dat"]
-        # rpt_dat_code = kwargs['rpt_dat_code']
+        self.__rpt_dat_code = kwargs["rpt_dat_code"]
 
         stp_list = list(rpt_dat.keys())
 
@@ -158,14 +153,14 @@ class App(tk.Tk):
         main 함수
         """
         self.app_cancel = False
-        self.stp_code = list(rpt_dat_code.keys())[self.cbo_stp.current()]  # get() -> value,  current -> index
-        self.rpt_type_code = list(rpt_dat_code[self.stp_code].keys())[self.cbo_rpt.current()]
-        self.rpt_cycle_code = rpt_dat_code[self.stp_code][self.rpt_type_code][self.cbo_cyc.current()]
+        self.stp_code = list(self.__rpt_dat_code.keys())[self.cbo_stp.current()]  # get() -> value,  current -> index
+        self.rpt_type_code = list(self.__rpt_dat_code[self.stp_code].keys())[self.cbo_rpt.current()]
+        self.rpt_cycle_code = self.__rpt_dat_code[self.stp_code][self.rpt_type_code][self.cbo_cyc.current()]
         self.start_date = self.txt_start_date.get_date()
         self.end_date = self.txt_end_date.get_date()
 
         if self.start_date >= self.end_date:
-            tkmb.showinfo("알림", "시작일이 종료일보다 클 수 없습니다.")
+            msgbox.showinfo("알림", "시작일이 종료일보다 클 수 없습니다.")
         else:
             # self.destroy()
             self.quit()
@@ -186,7 +181,6 @@ class App(tk.Tk):
 
 
 if __name__ == "__main__":
-
     conf = xlrpt_utils.read_config()
 
     stps = conf["stp_list"]
@@ -201,8 +195,6 @@ if __name__ == "__main__":
             rpt_list_code[rpt_code] = list(conf[stp_code][rpt_code]["rpt_cycle"].values())
         rpt_dat_code[stp_code] = rpt_list_code
         rpt_dat[stp_name] = rpt_list
-        print(rpt_dat[stp_name])
-        print(rpt_dat_code[stp_code])
 
     app = App(rpt_dat=rpt_dat, rpt_dat_code=rpt_dat_code)
     app.title("월/년 보고서 생성기 v0.1")

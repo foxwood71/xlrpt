@@ -5,21 +5,53 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: args Test",
+            "name": "Python: Cli test full args",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "args": [
-                "--stp",
+                "-p",
                 "op",
-                "--rpt_type",
+                "-t",
                 "op",
-                "--rpt_cycle",
+                "-c",
                 "m",
-                "--start_date",
+                "-s",
                 "2023-03-01",
-                "--end_date",
+                "-e",
                 "2023-03-31"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Cli test option arg1",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": [
+                "-p",
+                "op",
+                "-t",
+                "op",
+                "-c",
+                "m",
+                "-s",
+                "2023-03-01"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Cli test option arg2",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": [
+                "-p",
+                "op",
+                "-t",
+                "op",
+                "-c",
+                "m"
             ],
             "console": "integratedTerminal"
         },
