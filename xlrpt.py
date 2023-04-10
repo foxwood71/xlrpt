@@ -98,51 +98,50 @@ def main():
     diff_months = 12 * diff_date.years + diff_date.months  # 두 날짜의 차이나는 개월수
     diff_years = diff_date.years  # 두 날짜의 차이나는 개월수
 
-    for stp in stps:
-        if rpt_para.rpt_cycle == xlrpt_xl.MONTHLY:  # 월보
-            print("---- 월보 ----> " + stp)
-            for i in range(0, diff_months + 1, 1):
-                rpt_month_frist_date = rpt_para.start_date.replace(day=1) + relativedelta(months=i)
-                rpt_month_last_date = xlrpt_utils.last_day_of_month(rpt_month_frist_date)
+    if rpt_para.rpt_cycle == xlrpt_xl.MONTHLY:  # 월보
+        print("---- 월보 ----> " + rpt_para.stp)
+        for i in range(0, diff_months + 1, 1):
+            rpt_month_frist_date = rpt_para.start_date.replace(day=1) + relativedelta(months=i)
+            rpt_month_last_date = xlrpt_utils.last_day_of_month(rpt_month_frist_date)
 
-                xlrpt_xl.xlsx_rpt(
-                    conf=conf,
-                    stp=rpt_para.stp,
-                    rpt_type=rpt_para.rpt_type,
-                    rpt_cycl=rpt_para.rpt_cycle,
-                    start_date=rpt_month_frist_date,
-                    end_date=rpt_month_last_date,
-                )
+            xlrpt_xl.xlsx_rpt(
+                conf=conf,
+                stp=rpt_para.stp,
+                rpt_type=rpt_para.rpt_type,
+                rpt_cycl=rpt_para.rpt_cycle,
+                start_date=rpt_month_frist_date,
+                end_date=rpt_month_last_date,
+            )
 
-        if rpt_para.rpt_cycle == xlrpt_xl.YEARLY:  # 월보
-            print("---- 년보 ----> " + stp)
-            for i in range(0, diff_years + 1, 1):
-                rpt_year_first_date = rpt_para.start_date.replace(month=1, day=1) + relativedelta(years=i)
-                rpt_year_last_date = rpt_year_first_date.replace(month=12, day=31)
+    if rpt_para.rpt_cycle == xlrpt_xl.YEARLY:  # 월보
+        print("---- 년보 ----> " + rpt_para.stp)
+        for i in range(0, diff_years + 1, 1):
+            rpt_year_first_date = rpt_para.start_date.replace(month=1, day=1) + relativedelta(years=i)
+            rpt_year_last_date = rpt_year_first_date.replace(month=12, day=31)
 
-                xlrpt_xl.xlsx_rpt(
-                    conf=conf,
-                    stp=rpt_para.stp,
-                    rpt_type=rpt_para.rpt_type,
-                    rpt_cycl=rpt_para.rpt_cycle,
-                    start_date=rpt_year_first_date,
-                    end_date=rpt_year_last_date,
-                )
-        """
-        if rpt_para.rpt_type == xlrpt_xl.FLOW:  # 유량
-            print("---- 유량월보 ----> " + stp)
-            for i in range(0, diff_months + 1, 1):
-                rpt_month_frist_date = rpt_para.start_date.replace(day=1) + relativedelta(months=i)
-                rpt_month_last_date = xlrpt_utils.last_day_of_month(rpt_month_frist_date)
+            xlrpt_xl.xlsx_rpt(
+                conf=conf,
+                stp=rpt_para.stp,
+                rpt_type=rpt_para.rpt_type,
+                rpt_cycl=rpt_para.rpt_cycle,
+                start_date=rpt_year_first_date,
+                end_date=rpt_year_last_date,
+            )
+    """
+    if rpt_para.rpt_type == xlrpt_xl.FLOW:  # 유량
+        print("---- 유량월보 ----> " + stp)
+        for i in range(0, diff_months + 1, 1):
+            rpt_month_frist_date = rpt_para.start_date.replace(day=1) + relativedelta(months=i)
+            rpt_month_last_date = xlrpt_utils.last_day_of_month(rpt_month_frist_date)
 
-                xlrpt_xl.xlsx_rpt(
-                    conf=conf,
-                    stp=stp,
-                    start_date=rpt_month_frist_date,
-                    end_date=rpt_month_last_date,
-                    rpt_cycl=xlrpt_xl.FLOW,
-                )
-        """
+            xlrpt_xl.xlsx_rpt(
+                conf=conf,
+                stp=stp,
+                start_date=rpt_month_frist_date,
+                end_date=rpt_month_last_date,
+                rpt_cycl=xlrpt_xl.FLOW,
+            )
+    """
     if app_mode_ui:
         app_ui.msgbox("report generating fininsh")
     else:
