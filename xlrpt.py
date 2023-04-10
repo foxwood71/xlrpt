@@ -94,9 +94,12 @@ def main():
             exc = sys.exc_info()[1]
             print(f"error code : {exc}")
 
-    diff_date = relativedelta(rpt_para.start_date, rpt_para.end_date)  # 두 날짜의 차이 구하기
+    diff_date = relativedelta(rpt_para.end_date, rpt_para.start_date)  # 두 날짜의 차이 구하기
     diff_months = 12 * diff_date.years + diff_date.months  # 두 날짜의 차이나는 개월수
     diff_years = diff_date.years  # 두 날짜의 차이나는 개월수
+
+    # close all excel app
+    xlrpt_utils.close_all_excel_app()
 
     if rpt_para.rpt_cycle == xlrpt_xl.MONTHLY:  # 월보
         print("---- 월보 ----> " + rpt_para.stp)

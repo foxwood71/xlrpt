@@ -402,8 +402,8 @@ if __name__ == "__main__":
     xconf = xlrpt_utils.read_config()
 
     # 시작일,종료일 설정
-    START_DATE = "2023-01-01"
-    END_DATE = "2023-01-31"
+    START_DATE = "2023-03-01"
+    END_DATE = "2023-04-30"
 
     # 시작일, 종료일 datetime 으로 변환
     dt_start_date = datetime.datetime.strptime(START_DATE, "%Y-%m-%d")
