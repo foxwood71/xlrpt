@@ -10,12 +10,16 @@
 
 import datetime
 import tkinter as tk
-import tkinter.messagebox as msgbox
+import tkinter.messagebox
 from tkinter import ttk
 
 from tkcalendar import DateEntry
 
 import xlrpt_utils
+
+
+def msgbox(message: str) -> None:
+    tkinter.messagebox.showinfo("알림", message)
 
 
 class App(tk.Tk):
@@ -160,7 +164,7 @@ class App(tk.Tk):
         self.end_date = self.txt_end_date.get_date()
 
         if self.start_date >= self.end_date:
-            msgbox.showinfo("알림", "시작일이 종료일보다 클 수 없습니다.")
+            tkinter.messagebox.showinfo("알림", "시작일이 종료일보다 클 수 없습니다.")
         else:
             # self.destroy()
             self.quit()

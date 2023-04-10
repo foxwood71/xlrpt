@@ -5,176 +5,179 @@
     cimon일보를 가져와 월보와 년보를 생성하는 프로그램.
     Usage:
         # Command line run
-        # C:>start /b python xlrpt.py -p ga -s 2023-02-01 -e 2023-02-28 -t m
+        # C:>start /b python xlrpt.py -p ga -t m -c op -s 2023-02-01 -e 2023-02-28
 """
 
-import argparse
 import datetime
+
+from tap import Tap
 
 import xlrpt_utils
 
 
-def get_arg(**kwargs):
+class Cli(Tap):
     """
-    main 함수
+    Excel report generator v1.0
     """
-    # rpt_dat: dict = kwargs["rpt_dat"]
-    rpt_dat_code: dict = kwargs["rpt_dat_code"]
-    # help_msg: str = kwargs["help_msg"]
 
-    stp_code_list: list = list(rpt_dat_code.keys())
+    stp: str  # Report generation stp code
+    report_type: str  # Report generation type Code
+    report_cycle: str  # Report generating cycle code
+    start_date: datetime.date  # The report generation start date, defaults to Today
+    end_date: datetime.date  # Report generation end date, defaults to the last day of month of the start date
 
-    parser = argparse.ArgumentParser(description="월/년 보고서 생성기 v0.1")
-    parser.add_argument(
-        "-p",
-        "--stp",
-        type=str,
-        required=True,
-        default=None,
-        metavar="stp code",
-        help=f"The code of the sewage treatment plant for which you want to generate the report must be from "
-        f"{list(rpt_dat_code.keys())}.",
-    )
+    def configure(self) -> None:
+        self.add_argument("-p", "--stp", metavar="stp_code")
+        self.add_argument(
+            "-t",
+            "--report_type",
+            metavar="report_type_code",
+        )
+        self.add_argument(
+            "-c",
+            "--report_cycle",
+            metavar="report_cycle_code",
+        )
+        self.add_argument(
+            "-s",
+            "--start_date",
+            metavar="start_date",
+            type=lambda s: datetime.datetime.strptime(s, "%Y-%m-%d").date(),
+            default=None,
+            required=False,
+        )
+        self.add_argument(
+            "-e",
+            "--end_date",
+            metavar="end_date",
+            type=lambda s: datetime.datetime.strptime(s, "%Y-%m-%d").date(),
+            default=None,
+            required=False,
+        )
 
-    parser.add_argument(
-        "-t",
-        "--report_type",
-        type=str,
-        required=True,
-        default=None,
-        metavar="report type code",
-        help=f"Report Generation Type Code" f"{list(rpt_dat_code.keys())}.",  # 메세지 보강
-    )
+    def process_args(self):
+        rpt_dat: dict = {}
+        rpt_dat_code: dict = {}
 
-    parser.add_argument(
-        "-c",
-        "--report_cycle",
-        type=str,
-        required=True,
-        default=None,
-        metavar="report cycle code",
-        help=f"Report generating cycle code" f"{list(rpt_dat_code.keys())}.",  # 메세지 보강
-    )
+        conf: dict = xlrpt_utils.read_config()
 
-    parser.add_argument(
-        "-s",
-        "--start_date",
-        type=lambda s: datetime.datetime.strptime(s, "%Y-%m-%d").date(),
-        required=False,
-        default=datetime.date.today(),
-        metavar="start_date",
-        help="The report generation start date, defaults to Today",
-    )
+        stps: dict = conf["stp_list"]
 
-    parser.add_argument(
-        "-e",
-        "--end_date",
-        type=lambda s: datetime.datetime.strptime(s, "%Y-%m-%d").date(),
-        required=False,
-        default=None,
-        metavar="end_date",
-        help="Report generation end date, defaults to the last day of the current month",
-    )
+        for stp_name, stp_code in stps.items():
+            rpt_list = {}
+            rpt_list_code = {}
+            for rpt_name, rpt_code in conf[stp_code]["rpt_type"].items():
+                rpt_list[rpt_name] = list(conf[stp_code][rpt_code]["rpt_cycle"].keys())
+                rpt_list_code[rpt_code] = list(conf[stp_code][rpt_code]["rpt_cycle"].values())
+            rpt_dat_code[stp_code] = rpt_list_code
+            rpt_dat[stp_name] = rpt_list
 
-    args = parser.parse_args()
+        stp_list_code = list(rpt_dat_code.keys())
 
-    # 명령행 인수 논리 오류 검증 및 명칭 변경
+        # 명령행 인수 논리 오류 검증 및 명칭 변경
+        # 처리시설 코드 확인
+        if self.stp in stp_list_code:
+            self.report_type
+            report_type_code_list: list = list(rpt_dat_code[self.stp].keys())
 
-    today: datetime.date = datetime.datetime.today()
+            # 보고서 코드 확인
+            if self.report_type in report_type_code_list:
+                report_cycle_code_list: list = rpt_dat_code[self.stp][self.report_type]
 
-    if args.stp not in stp_code_list:
-        print(f"시설명이 {stp_code_list} 중에 있어야 합니다.")
-        args = None
-    else:
-        report_type_code_list: list = list(rpt_dat_code[args.stp].keys())
-        if args.report_type not in report_type_code_list:
-            print(f"{args.stp}의 보고서 종별 코드는 {report_type_code_list} 중에 있어야 합니다.")
-            args = None
+                # 보고서 주기 확인
+                if self.report_cycle not in report_cycle_code_list:
+                    raise ValueError(
+                        f"The cycle code of the {self.report_type} report of {self.stp} stp"
+                        f"must be in {report_cycle_code_list}."
+                    )
+            else:
+                raise ValueError(f"The report type code of {self.stp} stp must be in {report_type_code_list}.")
+
         else:
-            report_cycle_code_list: list = rpt_dat_code[args.stp][args.report_type]
-            if args.report_type not in report_cycle_code_list:
-                print(f"{args.stp}의 {args.report_type} 보고서의 주기 코드는 {report_cycle_code_list} 중에 있어야 합니다.")
-                args = None
+            raise ValueError(f"The stp code must be in {stp_list_code}.")
 
-    # if args.start_date is None:
-    #    args.start_date = datetime.date(today.year, today.month, 1)
+        # 보고서 작성 시작일 종료일 점검
+        if self.end_date is None:
+            if self.start_date is None:
+                self.start_date = datetime.datetime.today()
+            self.end_date = xlrpt_utils.last_day_of_month(self.start_date)
 
-    if args.end_date is None:
-        args.end_date = xlrpt_utils.last_day_of_month(args.start_date)
-    elif args.start_date > args.end_date:
-        print("시작일이 종료일보다 클 수 없습니다")
-        args = None
-    else:
-        pass
-
-    return args
-    # return (args.stp, args.start_date, args.end_date, args.month_report, args.year_report)
-
-
-if __name__ == "__main__":
-    import sys
-
-    conf: dict = xlrpt_utils.read_config()
-
-    rpt_para: dict = {}
-
-    rpt_dat: dict = {}
-    rpt_dat_code: dict = {}
-    stps: dict = conf["stp_list"]
-
-    for stp_name, stp_code in stps.items():
-        rpt_list = {}
-        rpt_list_code = {}
-        for rpt_name, rpt_code in conf[stp_code]["rpt_type"].items():
-            rpt_list[rpt_name] = list(conf[stp_code][rpt_code]["rpt_cycle"].keys())
-            rpt_list_code[rpt_code] = list(conf[stp_code][rpt_code]["rpt_cycle"].values())
-        rpt_dat_code[stp_code] = rpt_list_code
-        rpt_dat[stp_name] = rpt_list
-
-    # print("stp code is [" + ", ".join(f"{stp}" for stp in rpt_dat_code.keys()) + "]")
-
-    # print(
-    #     f'{list(rpt_dat_code)[0]} {list(rpt_dat_code["op"])[0]} report cycle code is  ['
-    #     + ", ".join(f"{cycle}" for cycle in rpt_dat_code["op"]["op"])
-    #     + "]"
-    # )
-
-    help_msg: str = ""
-    for stp_code in rpt_dat_code.keys():
-        help_msg = help_msg + stp_code + " ["
-        for rpt_code in list(rpt_dat_code[stp_code].keys())[:-1]:
-            help_msg = (
-                help_msg
-                + rpt_code
-                + " <"
-                + ", ".join(f"{cyc_code}" for cyc_code in rpt_dat_code[stp_code][rpt_code])
-                + ">, "
+        if self.start_date > self.end_date:
+            raise ValueError(
+                f"The start date of {self.report_type} report of {self.stp} " f"can't be later than the end date."
             )
+
+    def error(self, message):
+        """error(message: string)
+
+        Prints a usage message incorporating the message to stderr and
+        exits.
+
+        If you override this in a subclass, it should not return -- it
+        should either exit or raise an exception.
+        """
+        rpt_dat: dict = {}
+        rpt_dat_code: dict = {}
+
+        conf: dict = xlrpt_utils.read_config()
+
+        stps: dict = conf["stp_list"]
+
+        for stp_name, stp_code in stps.items():
+            rpt_list = {}
+            rpt_list_code = {}
+            for rpt_name, rpt_code in conf[stp_code]["rpt_type"].items():
+                rpt_list[rpt_name] = list(conf[stp_code][rpt_code]["rpt_cycle"].keys())
+                rpt_list_code[rpt_code] = list(conf[stp_code][rpt_code]["rpt_cycle"].values())
+            rpt_dat_code[stp_code] = rpt_list_code
+            rpt_dat[stp_name] = rpt_list
+
+        help_msg: str = ""
+
+        for stp_code in rpt_dat_code.keys():
+            help_msg = help_msg + " " * 4 + "stp code : " + stp_code + " --> report code : ["
+            for rpt_code in list(rpt_dat_code[stp_code].keys())[:-1]:
+                help_msg = (
+                    help_msg
+                    + rpt_code
+                    + " --> report cycle code : <"
+                    + ", ".join(f"{cyc_code}" for cyc_code in rpt_dat_code[stp_code][rpt_code])
+                    + ">, "
+                )
             help_msg = (
                 help_msg
-                + rpt_code
-                + " <"
+                + list(rpt_dat_code[stp_code].keys())[-1]
+                + "--> report cycle code : <"
                 + ", ".join(
                     f"{cyc_code}" for cyc_code in rpt_dat_code[stp_code][list(rpt_dat_code[stp_code].keys())[-1]]
                 )
                 + ">"
             )
-        help_msg = help_msg + "] \n"
+            help_msg = help_msg + "] \n"
 
-    # print(cli_help_msg)
+        # print(cli_help_msg)
+        message = message + "\n\n - example code list \n\n" + help_msg
+        self.print_usage(sys.stderr)
+        self.exit(2, ("%s: error msg: %s\n") % (self.prog, message))
 
-    cli_args = get_arg(rpt_dat=rpt_dat, rpt_dat_code=rpt_dat_code, help_msg=help_msg)
 
-    if cli_args is None:
-        sys.exit()
+if __name__ == "__main__":
+    import sys
 
-    else:
+    try:
+        cli_args = Cli().parse_args()
+
         rpt_para = {
-            "stp": cli_args.stp_code,
-            "rpt_type": cli_args.rpt_type_code,
-            "rpt_cycle": cli_args.rpt_cycle_code,
+            "stp": cli_args.stp,
+            "rpt_type": cli_args.report_type,
+            "rpt_cycle": cli_args.report_cycle,
             "start_date": cli_args.start_date,
             "end_date": cli_args.end_date,
         }
+        print(rpt_para)
 
-    print(rpt_para)
+    except ValueError as e:
+        print("option error", e)
+    except SystemExit:
+        exc = sys.exc_info()[1]
+        print(f"error code : {exc}")
