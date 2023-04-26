@@ -21,7 +21,7 @@ from openpyxl.utils.cell import coordinate_from_string, coordinate_to_tuple
 
 import xlrpt_utils
 
-SPECIAL = "sp"  # 유량
+FLOWRPT = "flow"  # 유량
 
 DAILY = "d"  # 일보
 MONTHLY = "m"  # 월보
@@ -120,7 +120,11 @@ def xlsx_rpt(**kwargs):
     date_cell_in_shts = conf[stp][rpt_type][dst_rpt_cycl]["date_cell_in_shts"]
     first_data_cell_in_shts = conf[stp][rpt_type][dst_rpt_cycl]["first_data_cell_in_shts"]
 
+<<<<<<< HEAD
     if rpt_type != SPECIAL:
+=======
+    if rpt_type != FLOWRPT:
+>>>>>>> 2a59d6130c08b681a532a6e078d5ce527604f3c7
         if dst_rpt_cycl == MONTHLY:  # MONTHLY
             src_rpt_cycl = DAILY
             src_rpt_date_height = DAILY_RPT_DATA_HEIGHT
@@ -148,7 +152,7 @@ def xlsx_rpt(**kwargs):
             src_wb_name_prefix = f"{start_date.year:04}"
 
             dst_wb_template = f"{conf['template_path']}/{conf[stp][rpt_type][dst_rpt_cycl]['template']}"
-            dst_wb_path = f"{rpt_type_root}"
+            dst_wb_path = f"{rpt_type_root}/"
             dst_wb_name = f"{start_date.year:04}.xlsx"
 
             first_data_rd_cell_in_shts = conf[stp][rpt_type][src_rpt_cycl]["first_sum_cell_in_shts"]
@@ -169,10 +173,10 @@ def xlsx_rpt(**kwargs):
         src_wb_name_prefix = f"{start_date.year:04}{start_date.month:02}"
 
         dst_wb_template = f"{conf['template_path']}/{conf[stp][rpt_type][dst_rpt_cycl]['template']}"
-        dst_wb_path = f"{rpt_type_root}/{start_date.year:04}"
+        dst_wb_path = f"{rpt_type_root}/{start_date.year:04}/"
         dst_wb_name = f"{start_date.year:04}{start_date.month:02}.xlsx"
 
-        first_data_rd_cell_in_shts = conf[stp][rpt_type][src_rpt_cycl]["first_sum_cell_in_shts"]
+        first_data_rd_cell_in_shts = conf[stp][rpt_type][src_rpt_cycl]["first_data_cell_in_shts"]
 
     # 모든 시트를 반복하며 병합된 셀의 범위를 읽어와 리스트 형태로 mcr_coord_list에 추가(보류)
     """
@@ -206,7 +210,7 @@ def xlsx_rpt(**kwargs):
 
             pg_offset = 0
 
-            if rpt_type != SPECIAL:  # monthly yealy report
+            if rpt_type != FLOWRPT:  # monthly yealy report
                 # monthly yearly report sheet level
                 for sht in range(0, wb_shts, 1):
                     # region - sheet processing print for debugging
@@ -302,6 +306,7 @@ def xlsx_rpt(**kwargs):
 
             else:  # special report
                 if conf[stp]["name"] == "경안맑은물복원센터":  # ga-stp special report(flow report)
+<<<<<<< HEAD
                     wb_sp_shts = conf[stp][rpt_type]["shts"]
 
                     for sht in range(0, len(wb_sp_shts), 1):
@@ -350,6 +355,49 @@ def xlsx_rpt(**kwargs):
                                 )
                                 c1 = column_index_from_string(first_data_cell_in_sht_rc[0]) + i
                                 dst_ws.cell(row=r1, column=c1).value = xl_flow_rng[i][0].value
+=======
+                    for flow_ws_idx, flow_ws_name in enumerate(conf[stp][rpt_type]["shts"]):
+                        ws_sht_conf = conf[stp][rpt_type]["shts"][flow_ws_name]
+                        ws_flow_sht = ws_sht_conf["sht"]
+                        ws_flow_pg = ws_sht_conf["pg"]
+                        ws_flow_col = ws_sht_conf["col"]
+
+                        first_data_rd_cell_in_shts_a1 = coordinate_from_string(first_data_rd_cell_in_shts[ws_flow_sht])
+                        first_data_cell_in_sht_rc = coordinate_from_string(first_data_cell_in_shts[flow_ws_idx])
+
+                        next_page = (pg_size_src * ws_flow_pg) + pg_offset
+                        pg_flow_first_cell = f"{ws_flow_col}" f"{first_data_rd_cell_in_shts_a1[1] + next_page}"
+
+                        pg_flow_last_cell = (
+                            f"{ws_flow_col}"
+                            f"{first_data_rd_cell_in_shts_a1[1]+(DAILY_RPT_DATA_HEIGHT - 1) + next_page}"
+                        )
+
+                        flow_rng = f"{pg_flow_first_cell}:{pg_flow_last_cell}"
+
+                        src_ws = src_wb.worksheets[ws_flow_sht]
+                        xl_flow_rng = src_ws[flow_rng]
+
+                        dst_ws = dst_wb.worksheets[flow_ws_idx]
+
+                        # Date Print
+                        if rpt_idx == 1:
+                            date_cell_in_shts_a1 = coordinate_from_string(date_cell_in_shts[flow_ws_idx])
+
+                            pg_date_cell_a1 = (
+                                f"{date_cell_in_shts_a1[0]}"
+                                f"{str(date_cell_in_shts_a1[1] + ((pg_size_dst * ws_flow_pg) + pg_offset))}"
+                            )
+
+                            dst_ws[pg_date_cell_a1].value = datetime.date(start_date.year, start_date.month, 1)
+                            dst_ws[pg_date_cell_a1].number_format = "yyyy-mm"
+
+                        # Data Print
+                        for i in range(0, DAILY_RPT_DATA_HEIGHT, 1):
+                            r1 = first_data_cell_in_sht_rc[1] + ((pg_size_dst * ws_flow_pg) + rpt_idx + pg_offset) - 1
+                            c1 = column_index_from_string(first_data_cell_in_sht_rc[0]) + i
+                            dst_ws.cell(row=r1, column=c1).value = xl_flow_rng[i][0].value
+>>>>>>> 2a59d6130c08b681a532a6e078d5ce527604f3c7
 
             src_wb.close()
 
@@ -375,7 +423,7 @@ def xlsx_rpt(**kwargs):
     excel.EnableEvents = False
     excel.Interactive = False
     excel.Visible = False
-    wb = excel.Workbooks.Open(f"{dst_wb_path}/{dst_wb_name}")
+    wb = excel.Workbooks.Open(f"{dst_wb_path}{dst_wb_name}")
     time.sleep(5)
     wb.Save()
     wb.Close()
@@ -392,14 +440,18 @@ if __name__ == "__main__":
     xconf = xlrpt_utils.read_config()
 
     # 시작일,종료일 설정
-    START_DATE = "2023-03-01"
-    END_DATE = "2023-04-30"
+    START_DATE = "2023-01-01"
+    END_DATE = "2023-01-30"
 
     # 시작일, 종료일 datetime 으로 변환
     dt_start_date = datetime.datetime.strptime(START_DATE, "%Y-%m-%d")
     dt_last_date = xlrpt_utils.last_day_of_month(dt_start_date)
     dt_end_date = datetime.datetime.strptime(END_DATE, "%Y-%m-%d")
 
+<<<<<<< HEAD
     xlsx_rpt(conf=xconf, stp="ga", rpt_type="sp", rpt_cycl="m", start_date=dt_start_date, end_date=dt_last_date)
+=======
+    xlsx_rpt(conf=xconf, stp="ga", rpt_type="flow", rpt_cycl="m", start_date=dt_start_date, end_date=dt_last_date)
+>>>>>>> 2a59d6130c08b681a532a6e078d5ce527604f3c7
 
     print("End of Test")
